@@ -46,7 +46,7 @@ function makeWindowHelpers(window) {
   let {clearTimeout, setTimeout} = window;
 
   // Call a function after waiting a little bit
-  function async(callback, delay) {
+  function asyncf(callback, delay) {
     let timer = setTimeout(function() {
       stopTimer();
       callback();
@@ -76,7 +76,7 @@ function makeWindowHelpers(window) {
   }
 
   return {
-    async: async,
+    asyncf: asyncf,
     change: change,
   };
 }

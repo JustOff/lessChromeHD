@@ -47,7 +47,7 @@ var gAddon;
 
 // Fix up the current window state and get ready to hide chrome
 function prepareLessChrome(window) {
-  let {async, change} = makeWindowHelpers(window);
+  let {asyncf, change} = makeWindowHelpers(window);
   let {document, gBrowser, gNavToolbox} = window;
 
   // Make sure tabs are on top
@@ -142,7 +142,7 @@ function prepareLessChrome(window) {
       var oldChild = orig.call(this, child);
       if (child.id == "print-preview-toolbar") {
 	PrintPreviewToolbarHeight = 0;
-	async(function() updateOffset(), 200);
+	asyncf(function() updateOffset(), 200);
 	}
       return oldChild;
     };
@@ -261,7 +261,7 @@ function prepareLessChrome(window) {
     let startTime = Date.now();
 
     // Do all steps on a timer so that show-hide-show won't flicker
-    (function shiftStep() shifter = async(function() {
+    (function shiftStep() shifter = asyncf(function() {
       // Start a little slow then speed up
       let step = Math.pow(Math.min(1, (Date.now() - startTime) / 150), 1.5);
       let comp = 1 - step;
@@ -290,7 +290,7 @@ function prepareLessChrome(window) {
   listen(window, gBrowser, "blur", function({target}){
     if (target.tagName == "INPUT" && target.type == "password") {
       // Wait a short bit after a blur in-case the user was clicking
-      async(function() setPassword(false), 500);
+      asyncf(function() setPassword(false), 500);
       delayHide(500);
     }
   });
@@ -450,7 +450,7 @@ function prepareLessChrome(window) {
       return;
 
     // Show on a very short delay to detect mouseover of a different context
-    asyncOut = async(function() {
+    asyncOut = asyncf(function() {
       show();
       asyncOut = null;
     });
@@ -519,7 +519,7 @@ function prepareLessChrome(window) {
       show(gBrowser.selectedBrowser);
 
       // Force the chrome to stay visible in-case chrome blurred
-      async(function() {
+      asyncf(function() {
         show();
 
         // Wait a few seconds before hiding the url/security context
@@ -570,7 +570,7 @@ function prepareLessChrome(window) {
     }
 
     // Hide then clear the timer
-    delayedHide = async(function() {
+    delayedHide = asyncf(function() {
       hide();
       delayedHide = null;
     }, wait);
@@ -591,7 +591,7 @@ function prepareLessChrome(window) {
     }
 
     // Show then clear the timer
-    delayedShow = async(function() {
+    delayedShow = asyncf(function() {
       show();
       delayedShow = null;
     }, wait);
@@ -622,7 +622,7 @@ function prepareLessChrome(window) {
 function activateLessChrome(activating) {
   // Watch for changes to full screen
   watchWindows(function(window) {
-    let {async, change} = makeWindowHelpers(window);
+    let {asyncf, change} = makeWindowHelpers(window);
     let {document, FullScreen} = window;
     let view = document.getElementById("View:FullScreen");
 
@@ -640,7 +640,7 @@ function activateLessChrome(activating) {
 
     // Check after letting things load to see if we're in the right state
     if (activating)
-      async(function() maybeToggle());
+      asyncf(function() maybeToggle());
 
     // Check the state after turning on/off autohiding toolbars
     change(FullScreen, "setAutohide", function(orig) {
